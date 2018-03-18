@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour {
         anim.SetBool("isJumping", jump > 0 || !grounded);
         //Apply all factors to moving
         rb2d.velocity = (Vector2.right * speed) + (Vector2.up * (jump + rb2d.velocity.y));
+        //Check ESC
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     void Flip(float direction)
