@@ -5,10 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float movementSpeed = 7.0f;
+    public float jumpForceInitial = 3.0f;
     public float jumpForce = 5.0f;
+    public float jumpDuration = 1.0f;
 
     [SerializeField]
     private bool grounded = false;
+    private float jumpStartTime;//when the jump last started
 
     Rigidbody2D rb2d;
     Animator anim;
@@ -20,7 +23,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         //Move Left and Right
         float horizontal = Input.GetAxis("Horizontal");
         float speed = horizontal * movementSpeed;
@@ -34,12 +37,17 @@ public class PlayerController : MonoBehaviour {
         //Jump
         float vertical = Input.GetAxis("Vertical");
         float jump = 0;
-        if (vertical > 0 || Input.GetButton("Jump"))
+        if (Input.GetButton("Jump"))
         {
-            if (grounded)
+            if (jumpStartTime == 0)
+            {
+                jumpStartTime = Time.time;
+                grounded = false;
+                jump = jumpForceInitial;
+            }
+            else if (Time.time < jumpStartTime + jumpDuration)
             {
                 jump = jumpForce;
-                grounded = false;
             }
         }
         anim.SetBool("isJumping", jump > 0 || !grounded);
@@ -60,5 +68,6 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
         grounded = true;
+        jumpStartTime = 0;
     }
 }
