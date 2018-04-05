@@ -9,8 +9,7 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce = 5.0f;
     public float jumpDuration = 1.0f;
 
-    [SerializeField]
-    private bool grounded = false;
+    private bool grounded = true;
     private float jumpStartTime;//when the jump last started
 
     Rigidbody2D rb2d;
